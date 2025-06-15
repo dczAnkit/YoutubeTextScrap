@@ -4,108 +4,490 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>YouTube Channel Video Titles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    body {
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      font-family: 'Courier New', Courier, monospace;
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+      color: #e2e8f0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 120, 198, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 198, 255, 0.1) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
     }
 
-    h1 {
-      margin-top: 30px;
-      font-size: 1.8rem;
-      color: #ffffff;
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+      animation: fadeInUp 0.8s ease-out;
     }
 
-    input[type="text"] {
-      padding: 10px;
-      width: 80%;
+    .title {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .subtitle {
+      font-size: 1.125rem;
+      color: #94a3b8;
+      font-weight: 400;
+      opacity: 0.9;
+    }
+
+    .input-section {
+      width: 100%;
       max-width: 600px;
-      background-color: #2e2e2e;
-      border: 1px solid #555;
-      color: #e0e0e0;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .input-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 1rem 1.25rem;
       font-size: 1rem;
-      border-radius: 4px;
-      margin-top: 20px;
+      font-weight: 400;
+      background: rgba(30, 41, 59, 0.8);
+      border: 2px solid rgba(71, 85, 105, 0.5);
+      border-radius: 12px;
+      color: #e2e8f0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+      font-family: 'Inter', sans-serif;
     }
 
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      background-color: #444;
-      border: none;
-      color: #fff;
-      cursor: pointer;
-      font-size: 1rem;
-      border-radius: 4px;
-      margin-right: 10px;
+    .input-field:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      transform: translateY(-1px);
     }
 
-    button:hover {
-      background-color: #666;
-    }
-
-    #result {
-      width: 90%;
-      max-width: 800px;
-      margin-top: 30px;
-      white-space: pre-wrap;
-      background-color: #121212;
-      border: 1px solid #333;
-      padding: 20px;
-      border-radius: 6px;
-      overflow-y: auto;
-      max-height: 60vh;
-    }
-
-    .loading {
-      color: #888;
-      margin-top: 20px;
+    .input-field::placeholder {
+      color: #64748b;
+      font-weight: 400;
     }
 
     .button-group {
-      margin-top: 10px;
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn {
+      padding: 0.875rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      text-decoration: none;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn:hover::before {
+      left: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+    }
+
+    .btn-secondary {
+      background: rgba(51, 65, 85, 0.8);
+      color: #e2e8f0;
+      border: 1px solid rgba(71, 85, 105, 0.5);
+      backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(71, 85, 105, 0.9);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .result-container {
+      width: 100%;
+      max-width: 900px;
+      margin-top: 2rem;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+
+    .result-box {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      max-height: 70vh;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-break: break-word;
+      position: relative;
+    }
+
+    .result-box::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .result-box::-webkit-scrollbar-track {
+      background: rgba(30, 41, 59, 0.5);
+      border-radius: 4px;
+    }
+
+    .result-box::-webkit-scrollbar-thumb {
+      background: rgba(71, 85, 105, 0.8);
+      border-radius: 4px;
+    }
+
+    .result-box::-webkit-scrollbar-thumb:hover {
+      background: rgba(102, 126, 234, 0.8);
+    }
+
+    .loading {
+      color: #94a3b8;
+      text-align: center;
+      font-style: italic;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 100px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(102, 126, 234, 0.3);
+      border-top: 2px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #64748b;
+      font-style: italic;
+      padding: 3rem 1rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .empty-state::before {
+      content: '📺';
+      display: block;
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      opacity: 0.5;
+    }
+
+    .error {
+      color: #f87171;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      padding: 1rem;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .success-toast {
+      position: fixed;
+      top: 2rem;
+      right: 2rem;
+      background: rgba(34, 197, 94, 0.9);
+      color: white;
+      padding: 0.875rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .success-toast.show {
+      transform: translateX(0);
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+
+      .header {
+        margin-bottom: 2rem;
+      }
+
+      .button-group {
+        flex-direction: column;
+        width: 100%;
+      }
+
+      .btn {
+        justify-content: center;
+        width: 100%;
+      }
+
+      .result-box {
+        padding: 1.5rem;
+        font-size: 0.9rem;
+        max-height: 60vh;
+      }
+
+      .success-toast {
+        top: 1rem;
+        right: 1rem;
+        left: 1rem;
+        right: 1rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .input-field {
+        padding: 0.875rem 1rem;
+        font-size: 0.95rem;
+      }
+
+      .btn {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+      }
+
+      .result-box {
+        padding: 1rem;
+        font-size: 0.85rem;
+      }
+    }
+
+    /* Enhanced emoji and international text support */
+    .result-box,
+    .input-field {
+      font-feature-settings: "liga" 1, "kern" 1;
+      text-rendering: optimizeLegibility;
+    }
+
+    /* Video title styling */
+    .video-title {
+      display: block;
+      margin-bottom: 0.5rem;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+    }
+
+    .video-title:last-child {
+      border-bottom: none;
+    }
+
+    .video-number {
+      color: #667eea;
+      font-weight: 600;
+      margin-right: 0.5rem;
     }
   </style>
 </head>
 <body>
-  <h1>YT Channel Video Titles Viewer</h1>
-  <input type="text" id="channelIdOrUrl" placeholder="Enter any YouTube channel link or ID (e.g. https://youtube.com/@example or UC123...)">
-  <div class="button-group">
-    <button onclick="fetchTitles()">Get Titles</button>
-    <button onclick="copyTitles()">Copy All</button>
-    <button onclick="downloadTitles()">Download TXT</button>
+  <div class="container">
+    <div class="header">
+      <h1 class="title">📺 YouTube Titles Viewer</h1>
+      <p class="subtitle">Extract and explore video titles from any YouTube channel</p>
+    </div>
+
+    <div class="input-section">
+      <div class="input-container">
+        <input 
+          type="text" 
+          id="channelIdOrUrl" 
+          class="input-field"
+          placeholder="🔗 Paste any YouTube channel link or ID (e.g., https://youtube.com/@example)"
+          autocomplete="off"
+          spellcheck="false"
+        >
+      </div>
+      
+      <div class="button-group">
+        <button class="btn btn-primary" onclick="fetchTitles()">
+          🚀 Get Titles
+        </button>
+        <button class="btn btn-secondary" onclick="copyTitles()">
+          📋 Copy All
+        </button>
+        <button class="btn btn-secondary" onclick="downloadTitles()">
+          💾 Download
+        </button>
+      </div>
+    </div>
+
+    <div class="result-container">
+      <div id="result" class="result-box">
+        <div class="empty-state">
+          Enter a YouTube channel URL above to get started
+        </div>
+      </div>
+    </div>
   </div>
-  <div id="result"></div>
+
+  <div id="successToast" class="success-toast"></div>
 
   <script>
     const apiKey = "AIzaSyBovxWppf740GaA_QpZFJumuaEG28QmUaU";
 
+    // Enhanced input handling
+    document.getElementById('channelIdOrUrl').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        fetchTitles();
+      }
+    });
+
     async function fetchTitles() {
       const input = document.getElementById('channelIdOrUrl').value.trim();
       const resultBox = document.getElementById('result');
-      resultBox.innerHTML = '<div class="loading">Fetching titles, please wait...</div>';
+      
+      if (!input) {
+        showError("Please enter a YouTube channel URL or ID");
+        return;
+      }
+
+      resultBox.innerHTML = `
+        <div class="loading">
+          <div class="spinner"></div>
+          Fetching video titles, please wait...
+        </div>
+      `;
 
       try {
         const uploadsPlaylistId = await resolveUploadsPlaylistId(input);
-        const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${uploadsPlaylistId}&key=${apiKey}`);
-        const data = await res.json();
+        let allTitles = [];
+        let nextPageToken = '';
+        let pageCount = 0;
+        const maxPages = 10; // Limit to prevent excessive API calls
 
-        if (!data.items || data.items.length === 0) {
-          resultBox.innerHTML = "No videos found or channel is empty.";
-          return;
-        }
+        do {
+          const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${uploadsPlaylistId}&key=${apiKey}${nextPageToken ? `&pageToken=${nextPageToken}` : ''}`;
+          const res = await fetch(url);
+          const data = await res.json();
 
-        const titles = data.items.map((v, i) => `${i + 1}. ${v.snippet.title}`).join("\n");
-        resultBox.textContent = titles;
+          if (data.error) {
+            throw new Error(data.error.message || 'API Error');
+          }
+
+          if (!data.items || data.items.length === 0) {
+            if (allTitles.length === 0) {
+              resultBox.innerHTML = '<div class="empty-state">No videos found or channel is empty</div>';
+              return;
+            }
+            break;
+          }
+
+          allTitles = allTitles.concat(data.items);
+          nextPageToken = data.nextPageToken || '';
+          pageCount++;
+
+          // Update loading message with progress
+          resultBox.innerHTML = `
+            <div class="loading">
+              <div class="spinner"></div>
+              Loaded ${allTitles.length} videos... ${nextPageToken ? 'Loading more...' : 'Almost done!'}
+            </div>
+          `;
+
+        } while (nextPageToken && pageCount < maxPages);
+
+        const formattedTitles = allTitles
+          .map((v, i) => `<span class="video-number">${i + 1}.</span>${escapeHtml(v.snippet.title)}`)
+          .join('\n');
+        
+        resultBox.innerHTML = formattedTitles;
+        showSuccess(`Successfully loaded ${allTitles.length} video titles! 🎉`);
+
       } catch (err) {
-        resultBox.innerHTML = `Error: ${err.message}`;
+        console.error('Error fetching titles:', err);
+        showError(`Error: ${err.message}`);
       }
     }
 
@@ -113,10 +495,15 @@
       const channelId = await resolveChannelId(input);
       const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`);
       const data = await res.json();
+      
+      if (data.error) {
+        throw new Error(data.error.message || 'Failed to get channel details');
+      }
+      
       if (data.items && data.items.length > 0) {
         return data.items[0].contentDetails.relatedPlaylists.uploads;
       } else {
-        throw new Error("Unable to retrieve uploads playlist.");
+        throw new Error("Unable to retrieve uploads playlist");
       }
     }
 
@@ -132,13 +519,13 @@
             const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=id&forUsername=${customName}&key=${apiKey}`);
             const data = await res.json();
             if (data.items && data.items.length > 0) return data.items[0].id;
-            throw new Error("Could not resolve custom username.");
+            throw new Error("Could not resolve custom username");
           } else if (url.pathname.startsWith('/@')) {
             const handle = url.pathname.slice(2);
-            const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${handle}&maxResults=1&key=${apiKey}`);
+            const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(handle)}&maxResults=1&key=${apiKey}`);
             const data = await res.json();
             if (data.items && data.items.length > 0) return data.items[0].snippet.channelId;
-            throw new Error("Could not resolve handle to channel ID.");
+            throw new Error("Could not resolve handle to channel ID");
           }
         }
 
@@ -146,33 +533,115 @@
           return input;
         }
 
-        throw new Error("Invalid channel URL or ID format.");
+        throw new Error("Invalid channel URL or ID format");
       } catch (err) {
-        throw new Error("Failed to resolve channel ID. " + err.message);
+        throw new Error("Failed to resolve channel ID: " + err.message);
       }
     }
 
     function copyTitles() {
-      const text = document.getElementById('result').textContent;
+      const resultBox = document.getElementById('result');
+      const text = resultBox.textContent || resultBox.innerText;
+      
+      if (!text || text.includes('Enter a YouTube channel URL') || text.includes('No videos found')) {
+        showError("No titles to copy");
+        return;
+      }
+
       navigator.clipboard.writeText(text).then(() => {
-        alert("Titles copied to clipboard.");
-      }, () => {
-        alert("Failed to copy titles.");
+        showSuccess("📋 Titles copied to clipboard!");
+      }).catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showSuccess("📋 Titles copied to clipboard!");
       });
     }
 
     function downloadTitles() {
-      const text = document.getElementById('result').textContent;
-      const blob = new Blob([text], { type: "text/plain" });
+      const resultBox = document.getElementById('result');
+      const text = resultBox.textContent || resultBox.innerText;
+      
+      if (!text || text.includes('Enter a YouTube channel URL') || text.includes('No videos found')) {
+        showError("No titles to download");
+        return;
+      }
+
+      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = "video_titles.txt";
+      a.download = `youtube_video_titles_${new Date().toISOString().split('T')[0]}.txt`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
+      showSuccess("💾 File downloaded successfully!");
     }
+
+    function showSuccess(message) {
+      const toast = document.getElementById('successToast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function showError(message) {
+      const resultBox = document.getElementById('result');
+      resultBox.innerHTML = `<div class="error">⚠️ ${escapeHtml(message)}</div>`;
+    }
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    // Add some visual feedback for button interactions
+    document.querySelectorAll('.btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = e.clientX - rect.left - size / 2;
+        const y = e.clientY - rect.top - size / 2;
+        
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        ripple.classList.add('ripple');
+        
+        this.appendChild(ripple);
+        
+        setTimeout(() => {
+          ripple.remove();
+        }, 600);
+      });
+    });
   </script>
+
+  <style>
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  </style>
 </body>
 </html>
