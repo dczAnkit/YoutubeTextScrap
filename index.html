@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Channel Video Titles</title>
+  <style>
+    body {
+      background-color: #1e1e1e;
+      color: #e0e0e0;
+      font-family: 'Courier New', Courier, monospace;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    h1 {
+      margin-top: 30px;
+      font-size: 1.8rem;
+      color: #ffffff;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      max-width: 600px;
+      background-color: #2e2e2e;
+      border: 1px solid #555;
+      color: #e0e0e0;
+      font-size: 1rem;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #444;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-size: 1rem;
+      border-radius: 4px;
+      margin-right: 10px;
+    }
+
+    button:hover {
+      background-color: #666;
+    }
+
+    #result {
+      width: 90%;
+      max-width: 800px;
+      margin-top: 30px;
+      white-space: pre-wrap;
+      background-color: #121212;
+      border: 1px solid #333;
+      padding: 20px;
+      border-radius: 6px;
+      overflow-y: auto;
+      max-height: 60vh;
+    }
+
+    .loading {
+      color: #888;
+      margin-top: 20px;
+    }
+
+    .button-group {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>YT Channel Video Titles Viewer</h1>
+  <input type="text" id="channelIdOrUrl" placeholder="Enter any YouTube channel link or ID (e.g. https://youtube.com/@example or UC123...)">
+  <div class="button-group">
+    <button onclick="fetchTitles()">Get Titles</button>
+    <button onclick="copyTitles()">Copy All</button>
+    <button onclick="downloadTitles()">Download TXT</button>
+  </div>
+  <div id="result"></div>
+
+  <script>
+    const apiKey = "AIzaSyBovxWppf740GaA_QpZFJumuaEG28QmUaU";
+
+    async function fetchTitles() {
+      const input = document.getElementById('channelIdOrUrl').value.trim();
+      const resultBox = document.getElementById('result');
+      resultBox.innerHTML = '<div class="loading">Fetching titles, please wait...</div>';
+
+      try {
+        const uploadsPlaylistId = await resolveUploadsPlaylistId(input);
+        const res = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${uploadsPlaylistId}&key=${apiKey}`);
+        const data = await res.json();
+
+        if (!data.items || data.items.length === 0) {
+          resultBox.innerHTML = "No videos found or channel is empty.";
+          return;
+        }
+
+        const titles = data.items.map((v, i) => `${i + 1}. ${v.snippet.title}`).join("\n");
+        resultBox.textContent = titles;
+      } catch (err) {
+        resultBox.innerHTML = `Error: ${err.message}`;
+      }
+    }
+
+    async function resolveUploadsPlaylistId(input) {
+      const channelId = await resolveChannelId(input);
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${channelId}&key=${apiKey}`);
+      const data = await res.json();
+      if (data.items && data.items.length > 0) {
+        return data.items[0].contentDetails.relatedPlaylists.uploads;
+      } else {
+        throw new Error("Unable to retrieve uploads playlist.");
+      }
+    }
+
+    async function resolveChannelId(input) {
+      try {
+        if (/^https?:\/\//.test(input)) {
+          const url = new URL(input);
+
+          if (url.pathname.startsWith('/channel/')) {
+            return url.pathname.split('/channel/')[1].split(/[/?#]/)[0];
+          } else if (url.pathname.startsWith('/user/') || url.pathname.startsWith('/c/')) {
+            const customName = url.pathname.split('/')[2];
+            const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=id&forUsername=${customName}&key=${apiKey}`);
+            const data = await res.json();
+            if (data.items && data.items.length > 0) return data.items[0].id;
+            throw new Error("Could not resolve custom username.");
+          } else if (url.pathname.startsWith('/@')) {
+            const handle = url.pathname.slice(2);
+            const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${handle}&maxResults=1&key=${apiKey}`);
+            const data = await res.json();
+            if (data.items && data.items.length > 0) return data.items[0].snippet.channelId;
+            throw new Error("Could not resolve handle to channel ID.");
+          }
+        }
+
+        if (/^[a-zA-Z0-9_-]{24}$/.test(input)) {
+          return input;
+        }
+
+        throw new Error("Invalid channel URL or ID format.");
+      } catch (err) {
+        throw new Error("Failed to resolve channel ID. " + err.message);
+      }
+    }
+
+    function copyTitles() {
+      const text = document.getElementById('result').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Titles copied to clipboard.");
+      }, () => {
+        alert("Failed to copy titles.");
+      });
+    }
+
+    function downloadTitles() {
+      const text = document.getElementById('result').textContent;
+      const blob = new Blob([text], { type: "text/plain" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = "video_titles.txt";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>
