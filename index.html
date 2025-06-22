@@ -780,7 +780,7 @@
             let finalTitle = `<span class="video-title" data-title="${escapeHtml(rawTitle)}">${number}${title}`;
             
             if (showViews && v.viewCount !== undefined) {
-              const viewCount = parseInt(v.viewCount).toLocaleString();
+              const viewCount = formatViewCount(v.viewCount);
               finalTitle += ` <span class="video-views">(Views: ${viewCount})</span>`;
             }
             
@@ -857,6 +857,19 @@
       } catch (err) {
         throw new Error("Failed to resolve channel ID: " + err.message);
       }
+    }
+
+    function formatViewCount(count) {
+      const num = parseInt(count);
+      if (isNaN(num)) return '0';
+      
+      if (num >= 1_000_000_000) {
+        return (num / 1_000_000_000).toFixed(1).replace(/\.0$/, '') + ' Billion';
+      }
+      if (num >= 1_000_000) {
+        return (num / 1_000_000).toFixed(1).replace(/\.0$/, '') + ' Million';
+      }
+      return num.toLocaleString();
     }
 
     function copyIndividualTitle(element) {
