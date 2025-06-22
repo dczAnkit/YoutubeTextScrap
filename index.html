@@ -12,10 +12,26 @@
       box-sizing: border-box;
     }
 
+    :root {
+      --sf-pro: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      --jetbrains-mono: 'JetBrains Mono', 'Courier New', monospace;
+      
+      --background: #0D1117;
+      --panel-bg: rgba(30, 41, 59, 0.15);
+      --panel-border: rgba(255, 255, 255, 0.06);
+      --text-primary: #f0f8ff;
+      --text-secondary: #a8b2d1;
+      --accent-primary: #5865f2;
+      --accent-gradient: linear-gradient(135deg, #7289da 0%, #5865f2 100%);
+      --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+      --glass-border: 1px solid rgba(255, 255, 255, 0.06);
+      --glass-blur: blur(25px);
+    }
+
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
-      color: #e2e8f0;
+      font-family: var(--sf-pro);
+      background: linear-gradient(135deg, #0D1117 0%, #1a1a2e 50%, #16213e 100%);
+      color: var(--text-primary);
       min-height: 100vh;
       overflow-x: hidden;
       position: relative;
@@ -29,11 +45,32 @@
       width: 100%;
       height: 100%;
       background: 
-        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(255, 120, 198, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 40%, rgba(120, 198, 255, 0.1) 0%, transparent 50%);
+        radial-gradient(circle at 20% 30%, rgba(88, 101, 242, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(114, 137, 218, 0.06) 0%, transparent 50%),
+        radial-gradient(circle at 40% 80%, rgba(88, 101, 242, 0.04) 0%, transparent 50%),
+        radial-gradient(circle at 60% 20%, rgba(114, 137, 218, 0.04) 0%, transparent 50%);
       pointer-events: none;
       z-index: -1;
+      animation: liquidFloat 25s ease-in-out infinite;
+    }
+
+    @keyframes liquidFloat {
+      0%, 100% { 
+        transform: translate(0, 0) scale(1) rotate(0deg); 
+        opacity: 0.8;
+      }
+      25% { 
+        transform: translate(-15px, -10px) scale(1.02) rotate(1deg); 
+        opacity: 0.9;
+      }
+      50% { 
+        transform: translate(10px, -8px) scale(0.98) rotate(-0.5deg); 
+        opacity: 0.7;
+      }
+      75% { 
+        transform: translate(-8px, 12px) scale(1.01) rotate(0.5deg); 
+        opacity: 0.85;
+      }
     }
 
     .container {
@@ -53,122 +90,222 @@
     }
 
     .title {
-      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-size: clamp(2.5rem, 6vw, 4rem);
       font-weight: 700;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: linear-gradient(135deg, #ffffff 0%, #a8b2d1 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
       margin-bottom: 0.5rem;
       line-height: 1.2;
+      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
     }
 
     .subtitle {
       font-size: 1.125rem;
-      color: #94a3b8;
+      color: var(--text-secondary);
       font-weight: 400;
-      opacity: 0.9;
+      opacity: 0.8;
     }
 
     .input-section {
       width: 100%;
-      max-width: 600px;
+      max-width: 700px;
       margin-bottom: 2rem;
       animation: fadeInUp 0.8s ease-out 0.2s both;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
     }
 
     .input-container {
       position: relative;
-      margin-bottom: 1.5rem;
+      display: flex;
+      gap: 0.75rem;
+      align-items: center;
     }
 
     .input-field {
-      width: 100%;
-      padding: 1rem 1.25rem;
+      flex: 1;
+      padding: 1.25rem 1.5rem;
       font-size: 1rem;
       font-weight: 400;
-      background: rgba(30, 41, 59, 0.8);
-      border: 2px solid rgba(71, 85, 105, 0.5);
-      border-radius: 12px;
-      color: #e2e8f0;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      backdrop-filter: blur(10px);
-      font-family: 'Inter', sans-serif;
+      background: var(--panel-bg);
+      border: var(--glass-border);
+      border-radius: 20px;
+      color: var(--text-primary);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: var(--glass-blur);
+      font-family: var(--sf-pro);
+      box-shadow: var(--glass-shadow);
     }
 
     .input-field:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-      transform: translateY(-1px);
+      border-color: rgba(88, 101, 242, 0.2);
+      box-shadow: 
+        0 0 0 4px rgba(88, 101, 242, 0.08),
+        0 8px 32px rgba(0, 0, 0, 0.12);
+      transform: translateY(-2px);
     }
 
     .input-field::placeholder {
       color: #64748b;
       font-weight: 400;
+      opacity: 0.6;
+    }
+
+    .paste-btn {
+      padding: 1.25rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      background: var(--panel-bg);
+      border: var(--glass-border);
+      border-radius: 20px;
+      color: var(--text-primary);
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: var(--glass-blur);
+      font-family: var(--sf-pro);
+      box-shadow: var(--glass-shadow);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+    }
+
+    .paste-btn:hover {
+      background: rgba(40, 51, 69, 0.2);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
     .button-group {
       display: flex;
-      gap: 0.75rem;
+      gap: 1rem;
       flex-wrap: wrap;
       justify-content: center;
     }
 
     .btn {
-      padding: 0.875rem 1.5rem;
-      font-size: 0.95rem;
-      font-weight: 500;
-      border: none;
-      border-radius: 10px;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      border: var(--glass-border);
+      border-radius: 16px;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      font-family: 'Inter', sans-serif;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      font-family: var(--sf-pro);
       display: flex;
       align-items: center;
       gap: 0.5rem;
       text-decoration: none;
       position: relative;
       overflow: hidden;
+      backdrop-filter: var(--glass-blur);
     }
-
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      transition: left 0.5s;
-    }
-
-    .btn:hover::before {
-      left: 100%;
-    }
-
+    
     .btn-primary {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--accent-gradient);
       color: white;
-      box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+      box-shadow: 
+        0 8px 32px rgba(88, 101, 242, 0.2),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
     }
 
     .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.6);
+      transform: translateY(-3px);
+      box-shadow: 
+        0 12px 40px rgba(88, 101, 242, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.12);
     }
 
     .btn-secondary {
-      background: rgba(51, 65, 85, 0.8);
-      color: #e2e8f0;
-      border: 1px solid rgba(71, 85, 105, 0.5);
-      backdrop-filter: blur(10px);
+      background: var(--panel-bg);
+      color: var(--text-primary);
+      border: var(--glass-border);
+      box-shadow: var(--glass-shadow);
     }
 
     .btn-secondary:hover {
-      background: rgba(71, 85, 105, 0.9);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+      background: rgba(40, 51, 69, 0.2);
+      border-color: rgba(255, 255, 255, 0.12);
+      transform: translateY(-2px);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.12),
+        0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+
+    .options-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        padding: 1rem;
+        background: var(--panel-bg);
+        border: var(--glass-border);
+        border-radius: 16px;
+        backdrop-filter: var(--glass-blur);
+        box-shadow: var(--glass-shadow);
+    }
+
+    .toggle-switch {
+        position: relative;
+        display: inline-block;
+        width: 48px;
+        height: 26px;
+    }
+
+    .toggle-switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.1);
+        transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 20px;
+        width: 20px;
+        left: 2px;
+        bottom: 2px;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f8ff 100%);
+        transition: .4s cubic-bezier(0.4, 0, 0.2, 1);
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    input:checked + .slider {
+        background: var(--accent-gradient);
+        border-color: rgba(88, 101, 242, 0.3);
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(22px);
+    }
+
+    .toggle-label {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+        font-weight: 500;
+        cursor: pointer;
+        user-select: none;
     }
 
     .result-container {
@@ -179,17 +316,19 @@
     }
 
     .result-box {
-      background: rgba(15, 23, 42, 0.9);
-      border: 1px solid rgba(51, 65, 85, 0.5);
-      border-radius: 16px;
-      padding: 2rem;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      background: rgba(15, 23, 42, 0.3);
+      border: var(--glass-border);
+      border-radius: 24px;
+      padding: 2.5rem;
+      backdrop-filter: var(--glass-blur);
+      box-shadow: 
+        0 8px 32px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
       max-height: 70vh;
       overflow-y: auto;
-      font-family: 'JetBrains Mono', 'Courier New', monospace;
+      font-family: var(--jetbrains-mono);
       font-size: 0.95rem;
-      line-height: 1.6;
+      line-height: 1.7;
       white-space: pre-wrap;
       word-break: break-word;
       position: relative;
@@ -200,36 +339,37 @@
     }
 
     .result-box::-webkit-scrollbar-track {
-      background: rgba(30, 41, 59, 0.5);
+      background: rgba(30, 41, 59, 0.2);
       border-radius: 4px;
     }
 
     .result-box::-webkit-scrollbar-thumb {
-      background: rgba(71, 85, 105, 0.8);
+      background: rgba(71, 85, 105, 0.4);
       border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.06);
     }
 
     .result-box::-webkit-scrollbar-thumb:hover {
-      background: rgba(102, 126, 234, 0.8);
+      background: var(--accent-primary);
     }
 
     .loading {
-      color: #94a3b8;
+      color: var(--text-secondary);
       text-align: center;
       font-style: italic;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 0.5rem;
+      gap: 0.75rem;
       min-height: 100px;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--sf-pro);
     }
 
     .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid rgba(102, 126, 234, 0.3);
-      border-top: 2px solid #667eea;
+      width: 24px;
+      height: 24px;
+      border: 2px solid rgba(88, 101, 242, 0.15);
+      border-top: 2px solid var(--accent-primary);
       border-radius: 50%;
       animation: spin 1s linear infinite;
     }
@@ -237,9 +377,8 @@
     .empty-state {
       text-align: center;
       color: #64748b;
-      font-style: italic;
       padding: 3rem 1rem;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--sf-pro);
     }
 
     .empty-state::before {
@@ -247,32 +386,50 @@
       display: block;
       font-size: 3rem;
       margin-bottom: 1rem;
-      opacity: 0.5;
+      opacity: 0.4;
     }
 
-    .error {
-      color: #f87171;
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      border-radius: 8px;
-      padding: 1rem;
-      font-family: 'Inter', sans-serif;
+    .error-toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translate(-50%, calc(100% + 2rem));
+      background: rgba(220, 38, 38, 0.85);
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
+      font-weight: 500;
+      box-shadow: 0 8px 32px rgba(220, 38, 38, 0.3);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      font-family: var(--sf-pro);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      width: calc(100% - 2rem);
+      max-width: 500px;
+      text-align: center;
+    }
+    
+    .error-toast.show {
+      transform: translate(-50%, 0);
     }
 
     .success-toast {
       position: fixed;
       top: 2rem;
       right: 2rem;
-      background: rgba(34, 197, 94, 0.9);
+      background: rgba(34, 197, 94, 0.8);
       color: white;
-      padding: 0.875rem 1.25rem;
-      border-radius: 8px;
+      padding: 1rem 1.5rem;
+      border-radius: 16px;
       font-weight: 500;
-      box-shadow: 0 8px 25px rgba(34, 197, 94, 0.4);
-      transform: translateX(100%);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 32px rgba(34, 197, 94, 0.3);
+      transform: translateX(calc(100% + 2rem));
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 1000;
-      font-family: 'Inter', sans-serif;
+      font-family: var(--sf-pro);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .success-toast.show {
@@ -294,70 +451,21 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 1.5rem 1rem;
-      }
-
-      .header {
-        margin-bottom: 2rem;
-      }
-
-      .button-group {
-        flex-direction: column;
-        width: 100%;
-      }
-
-      .btn {
-        justify-content: center;
-        width: 100%;
-      }
-
-      .result-box {
-        padding: 1.5rem;
-        font-size: 0.9rem;
-        max-height: 60vh;
-      }
-
-      .success-toast {
-        top: 1rem;
-        right: 1rem;
-        left: 1rem;
-        right: 1rem;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .input-field {
-        padding: 0.875rem 1rem;
-        font-size: 0.95rem;
-      }
-
-      .btn {
-        padding: 0.75rem 1.25rem;
-        font-size: 0.9rem;
-      }
-
-      .result-box {
-        padding: 1rem;
-        font-size: 0.85rem;
-      }
-    }
-
-    /* Enhanced emoji and international text support */
-    .result-box,
-    .input-field {
-      font-feature-settings: "liga" 1, "kern" 1;
-      text-rendering: optimizeLegibility;
-    }
-
-    /* Video title styling */
+    
     .video-title {
       display: block;
-      margin-bottom: 0.5rem;
-      padding: 0.5rem 0;
-      border-bottom: 1px solid rgba(51, 65, 85, 0.3);
+      margin-bottom: 0.25rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .video-title:hover {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      padding-left: 0.5rem;
+      padding-right: 0.5rem;
     }
 
     .video-title:last-child {
@@ -365,16 +473,140 @@
     }
 
     .video-number {
-      color: #667eea;
-      font-weight: 600;
-      margin-right: 0.5rem;
+      color: var(--accent-primary);
+      font-weight: 500;
+      margin-right: 0.75rem;
+      display: inline-block;
+      width: 35px;
+      text-align: right;
+      font-size: 0.9em;
+    }
+
+    .video-views {
+      color: var(--text-secondary);
+      font-size: 0.85em;
+      margin-left: 0.5rem;
+      font-style: italic;
+    }
+
+    .copy-hint {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-top: 1rem;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+
+    .copy-hint.show {
+      opacity: 0.7;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem 1rem;
+      }
+      .header {
+        margin-bottom: 2rem;
+      }
+      .title {
+        font-size: clamp(2rem, 10vw, 2.5rem);
+      }
+      .input-container {
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .input-field, .paste-btn {
+        width: 100%;
+      }
+      .paste-btn {
+        justify-content: center;
+      }
+      .button-group {
+        flex-direction: column;
+        width: 100%;
+      }
+      .btn {
+        justify-content: center;
+        width: 100%;
+      }
+      .result-box {
+        padding: 1.5rem;
+        font-size: 0.9rem;
+        max-height: 60vh;
+      }
+      .success-toast {
+        top: 1rem;
+        left: 1rem;
+        right: 1rem;
+        transform: translateY(-200%);
+        width: auto;
+      }
+      .success-toast.show {
+        transform: translateY(0);
+      }
+      .error-toast {
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        transform: translate(0, calc(100% + 1rem));
+        max-width: none;
+      }
+      .error-toast.show {
+        transform: translate(0, 0);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .header {
+        margin-bottom: 1.5rem;
+      }
+      .title {
+        font-size: 2rem;
+      }
+      .subtitle {
+        font-size: 1rem;
+      }
+      .input-field, .paste-btn {
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+        border-radius: 16px;
+      }
+      .btn {
+        padding: 0.875rem 1.5rem;
+        font-size: 0.95rem;
+        border-radius: 14px;
+      }
+      .options-container {
+        padding: 0.75rem;
+        border-radius: 14px;
+      }
+      .result-box {
+        padding: 1.25rem;
+        font-size: 0.85rem;
+        border-radius: 20px;
+      }
+      .video-title {
+        padding: 0.6rem 0;
+      }
+      .success-toast {
+        padding: 0.875rem 1.25rem;
+        font-size: 0.9rem;
+        border-radius: 12px;
+      }
+      .error-toast {
+        padding: 0.875rem 1.25rem;
+        font-size: 0.9rem;
+        border-radius: 12px;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1 class="title">📺 dcz Ankit's YouTube Titles Viewer</h1>
+      <h1 class="title">YouTube Title Extractor</h1>
       <p class="subtitle">Extract and explore video titles from any YouTube channel</p>
     </div>
 
@@ -384,10 +616,13 @@
           type="text" 
           id="channelIdOrUrl" 
           class="input-field"
-          placeholder="🔗 Paste any YouTube channel link or ID (e.g., https://youtube.com/@example)"
+          placeholder="Paste any YouTube channel link or ID (e.g., https://youtube.com/@example)"
           autocomplete="off"
           spellcheck="false"
         >
+        <button class="paste-btn" onclick="pasteFromClipboard()">
+          📋 Paste
+        </button>
       </div>
       
       <div class="button-group">
@@ -401,6 +636,14 @@
           💾 Download
         </button>
       </div>
+
+      <div class="options-container">
+        <label for="showViewsToggle" class="toggle-label">Show video views</label>
+        <label class="toggle-switch">
+          <input type="checkbox" id="showViewsToggle">
+          <span class="slider"></span>
+        </label>
+      </div>
     </div>
 
     <div class="result-container">
@@ -409,27 +652,59 @@
           Enter a YouTube channel URL above to get started
         </div>
       </div>
+      <p id="copyHint" class="copy-hint">Click on a title to copy it individually.</p>
     </div>
   </div>
 
   <div id="successToast" class="success-toast"></div>
+  <div id="errorToast" class="error-toast"></div>
 
   <script>
     const apiKey = "AIzaSyBovxWppf740GaA_QpZFJumuaEG28QmUaU";
 
-    // Enhanced input handling
     document.getElementById('channelIdOrUrl').addEventListener('keypress', function(e) {
       if (e.key === 'Enter') {
         fetchTitles();
       }
     });
 
+    document.getElementById('result').addEventListener('click', function(e) {
+      const clickedTitle = e.target.closest('.video-title');
+      if (clickedTitle) {
+        copyIndividualTitle(clickedTitle);
+      }
+    });
+
+    async function pasteFromClipboard() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (!text || text.trim() === '') {
+          showError("Nothing to paste from clipboard.");
+          return;
+        }
+        document.getElementById('channelIdOrUrl').value = text;
+        showSuccess("📋 Content pasted from clipboard!");
+      } catch (err) {
+        console.error('Clipboard paste failed:', err);
+        showError("Failed to paste from clipboard. Please grant permission or paste manually.");
+      }
+    }
+
     async function fetchTitles() {
       const input = document.getElementById('channelIdOrUrl').value.trim();
       const resultBox = document.getElementById('result');
+      const showViews = document.getElementById('showViewsToggle').checked;
+      const copyHint = document.getElementById('copyHint');
       
+      copyHint.classList.remove('show');
+
       if (!input) {
         showError("Please enter a YouTube channel URL or ID");
+        return;
+      }
+
+      if (/youtube\.com\/watch|youtu\.be\//.test(input)) {
+        showError("Please provide a channel URL, not a video URL. e.g. https://youtube.com/@example");
         return;
       }
 
@@ -442,14 +717,14 @@
 
       try {
         const uploadsPlaylistId = await resolveUploadsPlaylistId(input);
-        let allTitles = [];
+        let allVideos = [];
         let nextPageToken = '';
         let pageCount = 0;
-        const maxPages = 10; // Limit to prevent excessive API calls
+        const maxPages = 10;
 
         do {
-          const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${uploadsPlaylistId}&key=${apiKey}${nextPageToken ? `&pageToken=${nextPageToken}` : ''}`;
-          const res = await fetch(url);
+          const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet,contentDetails&maxResults=50&playlistId=${uploadsPlaylistId}&key=${apiKey}${nextPageToken ? `&pageToken=${nextPageToken}` : ''}`;
+          const res = await fetch(playlistUrl);
           const data = await res.json();
 
           if (data.error) {
@@ -457,33 +732,66 @@
           }
 
           if (!data.items || data.items.length === 0) {
-            if (allTitles.length === 0) {
+            if (allVideos.length === 0) {
               resultBox.innerHTML = '<div class="empty-state">No videos found or channel is empty</div>';
               return;
             }
             break;
           }
+          
+          let videosOnPage = data.items;
 
-          allTitles = allTitles.concat(data.items);
+          if (showViews) {
+            const videoIds = videosOnPage.map(item => item.contentDetails.videoId).join(',');
+            const statsUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${videoIds}&key=${apiKey}`;
+            const statsRes = await fetch(statsUrl);
+            const statsData = await statsRes.json();
+            
+            const viewsMap = new Map();
+            if (statsData.items) {
+              statsData.items.forEach(item => {
+                viewsMap.set(item.id, item.statistics.viewCount);
+              });
+            }
+            
+            videosOnPage.forEach(item => {
+              item.viewCount = viewsMap.get(item.contentDetails.videoId) || 0;
+            });
+          }
+
+          allVideos = allVideos.concat(videosOnPage);
           nextPageToken = data.nextPageToken || '';
           pageCount++;
 
-          // Update loading message with progress
           resultBox.innerHTML = `
             <div class="loading">
               <div class="spinner"></div>
-              Loaded ${allTitles.length} videos... ${nextPageToken ? 'Loading more...' : 'Almost done!'}
+              Loaded ${allVideos.length} videos... ${nextPageToken ? 'Loading more...' : 'Almost done!'}
             </div>
           `;
 
         } while (nextPageToken && pageCount < maxPages);
 
-        const formattedTitles = allTitles
-          .map((v, i) => `<span class="video-number">${i + 1}.</span>${escapeHtml(v.snippet.title)}`)
-          .join('\n');
+        const formattedContent = allVideos
+          .map((v, i) => {
+            const number = `<span class="video-number">${i + 1}.</span>`;
+            const rawTitle = v.snippet.title;
+            const title = escapeHtml(rawTitle);
+            let finalTitle = `<span class="video-title" data-title="${escapeHtml(rawTitle)}">${number}${title}`;
+            
+            if (showViews && v.viewCount !== undefined) {
+              const viewCount = parseInt(v.viewCount).toLocaleString();
+              finalTitle += ` <span class="video-views">(Views: ${viewCount})</span>`;
+            }
+            
+            finalTitle += `</span>`;
+            return finalTitle;
+          })
+          .join('');
         
-        resultBox.innerHTML = formattedTitles;
-        showSuccess(`Successfully loaded ${allTitles.length} video titles! 🎉`);
+        resultBox.innerHTML = formattedContent;
+        showSuccess(`Successfully loaded ${allVideos.length} video titles! 🎉`);
+        copyHint.classList.add('show');
 
       } catch (err) {
         console.error('Error fetching titles:', err);
@@ -503,7 +811,7 @@
       if (data.items && data.items.length > 0) {
         return data.items[0].contentDetails.relatedPlaylists.uploads;
       } else {
-        throw new Error("Unable to retrieve uploads playlist");
+        throw new Error("Could not find the channel. Please check the URL or ID.");
       }
     }
 
@@ -511,31 +819,56 @@
       try {
         if (/^https?:\/\//.test(input)) {
           const url = new URL(input);
+          const path = url.pathname;
 
-          if (url.pathname.startsWith('/channel/')) {
-            return url.pathname.split('/channel/')[1].split(/[/?#]/)[0];
-          } else if (url.pathname.startsWith('/user/') || url.pathname.startsWith('/c/')) {
-            const customName = url.pathname.split('/')[2];
+          if (path.startsWith('/channel/')) {
+            return path.split('/channel/')[1].split(/[/?#]/)[0];
+          } else if (path.startsWith('/user/') || path.startsWith('/c/')) {
+            const customName = path.split('/')[2];
             const res = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=id&forUsername=${customName}&key=${apiKey}`);
             const data = await res.json();
             if (data.items && data.items.length > 0) return data.items[0].id;
-            throw new Error("Could not resolve custom username");
-          } else if (url.pathname.startsWith('/@')) {
-            const handle = url.pathname.slice(2);
+            // Fallback to search, as forUsername is deprecated
+            return resolveChannelId(customName);
+          } else if (path.startsWith('/@')) {
+            const handle = path.slice(2).split(/[/?#]/)[0];
             const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(handle)}&maxResults=1&key=${apiKey}`);
             const data = await res.json();
-            if (data.items && data.items.length > 0) return data.items[0].snippet.channelId;
-            throw new Error("Could not resolve handle to channel ID");
+            if (data.items && data.items.length > 0 && data.items[0].snippet.channelId) {
+                return data.items[0].snippet.channelId;
+            }
+            throw new Error(`Could not resolve handle "@${handle}"`);
           }
         }
-
-        if (/^[a-zA-Z0-9_-]{24}$/.test(input)) {
-          return input;
+        
+        // Assume it's a channel ID or a vanilla username
+        if (/^UC[a-zA-Z0-9_-]{22}$/.test(input)) {
+          return input; // It's a channel ID
         }
 
-        throw new Error("Invalid channel URL or ID format");
+        // Final attempt: search for the input as a query
+        const res = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(input)}&maxResults=1&key=${apiKey}`);
+        const data = await res.json();
+        if (data.items && data.items.length > 0) {
+            return data.items[0].snippet.channelId;
+        }
+
+        throw new Error("Invalid or unrecognized channel format.");
       } catch (err) {
         throw new Error("Failed to resolve channel ID: " + err.message);
+      }
+    }
+
+    function copyIndividualTitle(element) {
+      const title = element.dataset.title;
+      if (title) {
+        navigator.clipboard.writeText(title).then(() => {
+          const shortTitle = title.length > 40 ? title.substring(0, 37) + '...' : title;
+          showSuccess(`Copied: "${shortTitle}"`);
+        }).catch(err => {
+          showError("Failed to copy title.");
+          console.error('Clipboard copy failed:', err);
+        });
       }
     }
 
@@ -543,22 +876,26 @@
       const resultBox = document.getElementById('result');
       const text = resultBox.textContent || resultBox.innerText;
       
-      if (!text || text.includes('Enter a YouTube channel URL') || text.includes('No videos found')) {
+      if (!text || resultBox.querySelector('.empty-state') || resultBox.querySelector('.error')) {
         showError("No titles to copy");
         return;
       }
 
       navigator.clipboard.writeText(text).then(() => {
         showSuccess("📋 Titles copied to clipboard!");
-      }).catch(() => {
-        // Fallback for older browsers
+      }, () => {
         const textArea = document.createElement('textarea');
         textArea.value = text;
         document.body.appendChild(textArea);
+        textArea.focus();
         textArea.select();
-        document.execCommand('copy');
+        try {
+          document.execCommand('copy');
+          showSuccess("📋 Titles copied to clipboard!");
+        } catch (err) {
+          showError("Failed to copy titles.");
+        }
         document.body.removeChild(textArea);
-        showSuccess("📋 Titles copied to clipboard!");
       });
     }
 
@@ -566,7 +903,7 @@
       const resultBox = document.getElementById('result');
       const text = resultBox.textContent || resultBox.innerText;
       
-      if (!text || text.includes('Enter a YouTube channel URL') || text.includes('No videos found')) {
+      if (!text || resultBox.querySelector('.empty-state') || resultBox.querySelector('.error')) {
         showError("No titles to download");
         return;
       }
@@ -580,7 +917,6 @@
       a.click();
       document.body.removeChild(a);
       URL.revokeObjectURL(url);
-      showSuccess("💾 File downloaded successfully!");
     }
 
     function showSuccess(message) {
@@ -593,8 +929,12 @@
     }
 
     function showError(message) {
-      const resultBox = document.getElementById('result');
-      resultBox.innerHTML = `<div class="error">⚠️ ${escapeHtml(message)}</div>`;
+      const toast = document.getElementById('errorToast');
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 4000);
     }
 
     function escapeHtml(text) {
@@ -602,46 +942,6 @@
       div.textContent = text;
       return div.innerHTML;
     }
-
-    // Add some visual feedback for button interactions
-    document.querySelectorAll('.btn').forEach(btn => {
-      btn.addEventListener('click', function(e) {
-        const ripple = document.createElement('span');
-        const rect = this.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = e.clientX - rect.left - size / 2;
-        const y = e.clientY - rect.top - size / 2;
-        
-        ripple.style.width = ripple.style.height = size + 'px';
-        ripple.style.left = x + 'px';
-        ripple.style.top = y + 'px';
-        ripple.classList.add('ripple');
-        
-        this.appendChild(ripple);
-        
-        setTimeout(() => {
-          ripple.remove();
-        }, 600);
-      });
-    });
   </script>
-
-  <style>
-    .ripple {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: scale(0);
-      animation: ripple-animation 0.6s linear;
-      pointer-events: none;
-    }
-
-    @keyframes ripple-animation {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-  </style>
 </body>
 </html>
